@@ -44,10 +44,6 @@ jobs:
       - name: Login Azure
         run: |
           az login --service-principal -u ${{ secrets.SP_APP_ID }} -p ${{ secrets.SP_PASSWD }} --tenant ${{ secrets.SP_TENANT_ID }} --output none
-      - name: Build dapr and its docker image
-        run: |
-          make build-linux
-          make docker-build
       - name: Upload Helm charts to ACR
         run: |
           make upload-helmchart-acr

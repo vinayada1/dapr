@@ -3,7 +3,7 @@
 # Licensed under the MIT License.
 # ------------------------------------------------------------
 
-name: dapr-test
+name: dapr-helm-to-acr
 
 on:
   push:

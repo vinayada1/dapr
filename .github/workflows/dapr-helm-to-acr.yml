@@ -43,7 +43,7 @@ jobs:
           version: ${{ env.HELMVER }}
       - name: Login Azure
         run: |
-          az login --service-principal -u 31450916-f863-4c27-88ac-501d63de1a36 -p 131d28c6-9fbd-4eff-8aab-6d458b52df2a --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47 --output none
+          az login --service-principal -u ${{ secrets.SP_APP_ID }} -p ${{ secrets.SP_PASSWD }} --tenant ${{ secrets.SP_TENANT_ID }} --output none
       - name: Upload Helm charts to ACR
         run: |
           make upload-helmchart-acr

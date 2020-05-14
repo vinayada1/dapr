@@ -12,7 +12,7 @@ on:
 
 jobs:
   test-e2e:
-    name: helm chart uplaod
+    name: helm chart upload
     runs-on: ubuntu-latest
     env:
       GOVER: 1.14
@@ -29,12 +29,10 @@ jobs:
       MAX_TEST_TIMEOUT: 5400
     steps:
       - name: Set up Go ${{ env.GOVER }}
-        if: env.CHECKOUT_REPO != ''
         uses: actions/setup-go@v2-beta
         with:
           go-version: ${{ env.GOVER }}
       - name: Check out code into the Go module directory
-        if: env.CHECKOUT_REPO != ''
         uses: actions/checkout@v2
         with:
           repository: ${{ env.CHECKOUT_REPO }}
@@ -44,15 +42,12 @@ jobs:
         with:
           version: ${{ env.HELMVER }}
       - name: Login Azure
-        if: env.CHECKOUT_REPO != ''
         run: |
           az login --service-principal -u ${{ secrets.SP_APP_ID }} -p ${{ secrets.SP_PASSWD }} --tenant ${{ secrets.SP_TENANT_ID }} --output none
       - name: Build dapr and its docker image
-        if: env.TEST_CLUSTER != ''
         run: |
           make build-linux
           make docker-build
       - name: Upload Helm charts to ACR
-        if: env.TEST_CLUSTER != ''
         run: |
           make upload-helmchart-acr

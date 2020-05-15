@@ -19,9 +19,10 @@ jobs:
       GOOS: linux
       GOARCH: amd64
       GOPROXY: https://proxy.golang.org
-      SP_APP_ID: ${{ secrets.SP_APP_ID }}
-      SP_PASSWD: ${{ secrets.SP_PASSWD }}
-      SP_TENANT_ID: ${{ secrets.SP_TENANT_ID }}
+      HELM: helm
+      RELEASE_NAME: dapr
+      DAPR_VERSION: 0.7.1
+      HELM_CHART_ROOT: ./charts/dapr
       DAPR_REGISTRY: ${{ secrets.DOCKER_TEST_REGISTRY }}
       DAPR_TEST_REGISTRY: ${{ secrets.DOCKER_TEST_REGISTRY }}
       HELMVER: v3.0.3
@@ -44,6 +45,13 @@ jobs:
       - name: Login Azure
         run: |
           az login --service-principal -u ${{ secrets.SP_APP_ID }} -p ${{ secrets.SP_PASSWD }} --tenant ${{ secrets.SP_TENANT_ID }} --output none
+      - name: Build dapr and its docker image
+        run: |
+          make build-linux
+          make docker-build
       - name: Upload Helm charts to ACR
         run: |
-          make upload-helmchart-acr
+          export HELM_EXPERIMENTAL_OCI=1
+          echo ${{ secrets.SP_PASSWD }} | helm registry login ${{ secrets.ACR_NAME }} --username ${{ secrets.SP_APP_ID }} --password-stdin
+          helm chart save ${{ env.HELM_CHART_ROOT }} ${{ secrets.ACR_NAME }}/${{ HELM }}/${{ env.RELEASE_NAME }}:${{ env.DAPR_VERSION }}
+          helm chart push ${{ secrets.ACR_NAME }}/${{ HELM }}/${{ env.RELEASE_NAME }}:${{ env.DAPR_VERSION }}

@@ -47,7 +47,7 @@ jobs:
           az login --service-principal -u ${{ secrets.SP_APP_ID }} -p ${{ secrets.SP_PASSWD }} --tenant ${{ secrets.SP_TENANT_ID }} --output none
       - name: Upload Helm charts to ACR
         run: |
-          export HELM_EXPERIMENTAL_OCI=1
+          `export HELM_EXPERIMENTAL_OCI=1`
           `echo ${{ secrets.SP_PASSWD }} | helm registry login ${{ secrets.ACR_NAME }} --username ${{ secrets.SP_APP_ID }} --password-stdin`
           `helm chart save ${{ env.HELM_CHART_ROOT }} ${{ secrets.ACR_NAME }}/${{ HELM }}/${{ env.RELEASE_NAME }}:${{ env.DAPR_VERSION }}`
           `helm chart push ${{ secrets.ACR_NAME }}/${{ HELM }}/${{ env.RELEASE_NAME }}:${{ env.DAPR_VERSION }}`

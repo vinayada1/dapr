@@ -23,7 +23,7 @@ __Note: Dapr is currently under community development in alpha phase. Dapr is no
 ## Goals
 
 - Enable developers using *any* language or framework to write distributed applications
-- Solve the hard problems developers face building microservice applications by providing best practice building blocks
+- Solve the hard problems developers face building microservice applications by providing best practice building blocks.
 - Be community driven, open and vendor neutral
 - Gain new contributors
 - Provide consistency and portability through open APIs
